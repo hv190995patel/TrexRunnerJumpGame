@@ -98,6 +98,11 @@ class StartGame: SKScene,SKPhysicsContactDelegate {
             self.scoreLabel.text = "Score: \(score)"
         }
         checkScore()
+        detectEyebrow()
+        if(bulletMove == true) {
+             addBullet()
+        }
+        
         if(randomTime == 0){
 //            print("BIRD ADDED")
             addBird()
@@ -126,6 +131,12 @@ class StartGame: SKScene,SKPhysicsContactDelegate {
         else if(self.cactus.position.x >=  0.0) {
             let cactusMovement1 = SKAction.move(to: CGPoint(x: -self.size.width, y:124.219), duration: 10)
             cactus.run(cactusMovement1)
+        }
+        
+        if(self.dinasour.position.x > frame.size.width - 100) {
+            print("Restore Position of Dinasour")
+            self.dinasour.position.x = 90.0
+            print("ddd\(self.dinasour.position.x)")
         }
 
         //detect if the jump is straight or parabola
@@ -157,12 +168,6 @@ class StartGame: SKScene,SKPhysicsContactDelegate {
             else {
                 jumpStraightDown()
             }
-        }
-
-        if(dinasour.position.x >= frame.size.width - 100){
-            dinasour.position = CGPoint(x: 92.183 , y:124.219)
-        } else {
-//            print("Not Exceeded")
         }
         
         //if jump-> Straight
@@ -214,9 +219,6 @@ class StartGame: SKScene,SKPhysicsContactDelegate {
         
     }
     
-    
-    
-    
     func jumpParabolaDown() {
         
         let dinoParaJumpDown = SKAction.move(to: CGPoint(x: (self.dinasour.position.x) + (dMove)  , y:124.219), duration: 0.3)
@@ -239,15 +241,13 @@ class StartGame: SKScene,SKPhysicsContactDelegate {
         }
 
         if(dinasourMove == true) {
-            dinasourMove = false
-            bulletMove = true
+//            dinasourMove = false
+            
         } else {
             dinasourMove = true
         }
 
-        if(bulletMove == true) {
-            // addBullet()
-        }
+        
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
@@ -342,5 +342,30 @@ class StartGame: SKScene,SKPhysicsContactDelegate {
     
     func detectEyebrow() {
         print("EYebrow detected")
+        self.db = Database.database().reference()
+        self.db.child("startGame").child(deviceId).observeSingleEvent(of: .value, with:{
+            (snapshot) in
+            let x = snapshot.value as! NSDictionary
+            let eyeBrowValue = x["brows"]!
+            
+            let toungueValue = x["toungue"]
+            var ui = 0.5 as! NSNumber
+            
+            if eyeBrowValue as! Float > 0.5 {
+                self.dinasourMove = true
+            } else {
+                self.dinasourMove = false
+            }
+            
+//            if(toungueValue as! Float > 0.8) {
+//                self.bulletMove = true
+//            }
+//            
+            
+            
+//            if eyeBrowValue as! Float < 0.5 {
+//                self.dinasourMove = false
+//            }
+        })
     }
 }

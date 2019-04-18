@@ -91,16 +91,24 @@ class GameViewController: UIViewController,ARSessionDelegate {
             return
         }
         
-        if browinnerUp > 0.5 {
-            print("Move Dino Up")
+        guard let toungue = blendShapes[.tongueOut] else {
+            return
         }
+        
+        print("TOungue\(toungue)")
+        
+//        print("BrowInnerUp\(browinnerUp)")
+        
         
         self.db = Database.database().reference()
         self.db.child("startGame").child(deviceId).observeSingleEvent(of: .value, with:{
             (snapshot) in
             let x = snapshot.value as! NSDictionary
-            print("x\(x["brows"])")
+//            print("x\(x["brows"])")
+            self.db = Database.database().reference()
+            self.db.child("startGame").child(self.deviceId).child("brows").setValue(browinnerUp)
             
+            self.db.child("startGame").child(self.deviceId).child("toungue").setValue(toungue)
         })
         
      }

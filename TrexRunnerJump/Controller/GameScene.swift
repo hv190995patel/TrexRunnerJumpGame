@@ -60,15 +60,14 @@ class GameScene: SKScene {
     }
     
     func checkExists() {
+        
         self.db = Database.database().reference()
         self.db.child("score").child(deviceId).observeSingleEvent(of: .value, with:{
             (snapshot) in
-            let x = snapshot.value as! NSDictionary
-            let checkPhone = x["deviceId"]!
-           print("snap\(x["deviceId"]!)")
             
-            if(x["deviceId"] as! String == self.deviceId) {
+            if(snapshot.exists()) {
                 print("Already Exists")
+                
             } else {
                 self.saveData()
                 print("New User")

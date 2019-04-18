@@ -25,7 +25,7 @@ class Bullet: SKSpriteNode {
         super.init(texture:texture,color:color,size:size)
         
         //add physics to orange
-        //        self.physicsBody = SKPhysicsBody(circleOfRadius: size.width/2)
+//                self.physicsBody = SKPhysicsBody(circleOfRadius: size.width/2)
     }
     
     required init?(coder aDecoder: NSCoder) {
